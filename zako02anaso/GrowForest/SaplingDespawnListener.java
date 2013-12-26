@@ -21,6 +21,7 @@ public class SaplingDespawnListener implements Listener
 	public void saplingDespawnEvent(ItemDespawnEvent event)
 	{
 		MaterialData data = event.getEntity().getItemStack().getData();
+
 		if (data != null && data instanceof Tree)
 		{
 			// ダメージ値の取得には非推奨の関数を使用
@@ -32,10 +33,16 @@ public class SaplingDespawnListener implements Listener
 			// 苗木の1つ下のブロックを取得
 			Material baseBlock = world.getBlockAt(event.getLocation().getBlockX(), event.getLocation().getBlockY()-1, event.getLocation().getBlockZ()).getType();
 
-			if(baseBlock == Material.GRASS || baseBlock == Material.DIRT)  // 1つ下が草か土ならば
+			// 1つ下が草か土ならば
+			if(baseBlock == Material.GRASS || baseBlock == Material.DIRT)
 			{
-				// 苗木に置換する
-				world.getBlockAt(event.getLocation()).setType(Material.SAPLING);
+				// 今の場所にブロックがなにも無いならば
+				if(world.getBlockAt(event.getLocation().getBlockX(), event.getLocation().getBlockY(), event.getLocation().getBlockZ()).getType() == Material.AIR)
+				{
+					// 苗木に置換する
+					world.getBlockAt(event.getLocation()).setType(Material.SAPLING);
+					world.getBlockAt(event.getLocation()).setData(b);
+				}
 			}
 			System.out.println("ItemDespawn!  " + event.getEntity().getItemStack().getType().name() + " : " + b);
 		}
