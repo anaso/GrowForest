@@ -1,4 +1,0 @@
-GrowForest
-==========
-
-Minecraft Bukkit Plugin
