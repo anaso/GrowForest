@@ -2,6 +2,8 @@ package zako02anaso.GrowForest;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.TreeSpecies;
+import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,12 +22,16 @@ public class SaplingDespawnListener implements Listener
 	@EventHandler
 	public void saplingDespawnEvent(ItemDespawnEvent event)
 	{
-		MaterialData data = event.getEntity().getItemStack().getData();
+		MaterialData eventItemData = event.getEntity().getItemStack().getData();
 
-		if (data != null && data instanceof Tree)
+		if (eventItemData != null && eventItemData instanceof Tree)
 		{
-			// ダメージ値の取得には非推奨の関数を使用
-			Byte b = data.getData();
+			// メタデータの取得は結局非推奨です
+			byte saplingMetadata = eventItemData.getData();
+			
+			//Tree saplingData = (Tree)eventItemData;
+			//String saplingNameString = saplingData.getSpecies().toString();
+			//MaterialData setSapling = new Tree(TreeSpecies.valueOf(saplingNameString));
 
 			// ワールドを取得
 			World world = Bukkit.getServer().getWorld(event.getLocation().getWorld().getUID());
@@ -36,15 +42,16 @@ public class SaplingDespawnListener implements Listener
 			// 1つ下が草か土ならば
 			if(baseBlock == Material.GRASS || baseBlock == Material.DIRT)
 			{
-				// 今の場所にブロックがなにも無いならば
+				// 今の場所にブロックが何も無いならば
 				if(world.getBlockAt(event.getLocation().getBlockX(), event.getLocation().getBlockY(), event.getLocation().getBlockZ()).getType() == Material.AIR)
 				{
-					// 苗木に置換する
+					// 苗木に置換する 結局メタデータの設定は非推奨のまま
 					world.getBlockAt(event.getLocation()).setType(Material.SAPLING);
-					world.getBlockAt(event.getLocation()).setData(b);
+					world.getBlockAt(event.getLocation()).setData(saplingMetadata);
 				}
 			}
-			System.out.println("ItemDespawn!  " + event.getEntity().getItemStack().getType().name() + " : " + b);
+			//System.out.println("ItemDespawn!  " + event.getEntity().getItemStack().getType().name() + " : " + saplingNameString);
+			//System.out.println("ItemDespawn!  " + event.getEntity().getItemStack().getType().name() + " : " + saplingMetadata);
 		}
 	}
 
